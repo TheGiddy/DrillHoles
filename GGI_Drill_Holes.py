@@ -16,7 +16,7 @@ empty_colour = '#FF0022'
 
 
 # Colour data, first value is low end of nickel percent range, second value is high, third value is hex colour code
-colour_data = [[0.5, 1.5, '#D0E6F3'],
+blue_swatch = [[0.5, 1.5, '#D0E6F3'],
                [1.51, 3.0, '#8BC2E2'],
                [3.01, 4.5, '#459DD1'],
                [4.51, 6.0, '#0079C1'],
@@ -24,7 +24,17 @@ colour_data = [[0.5, 1.5, '#D0E6F3'],
                [7.51, 9.0, '#003758'],
                [9.01, 100, '#001624']]
 
-df_colour = pd.DataFrame(colour_data, columns=['low_r', 'high_r', 'colour'])
+red_swatch = [[0.5, 1.5, '#99525A'],
+               [1.51, 3.0, '#802731'],
+               [3.01, 4.5, '#6A111B'],
+               [4.51, 6.0, '#550E16'],
+               [6.01, 7.5, '#400A10'],
+               [7.51, 9.0, '#2B070B'],
+               [9.01, 100, '#160406']]
+
+colours = red_swatch
+
+df_colour = pd.DataFrame(colours, columns=['low_r', 'high_r', 'colour'])
 
 # Loads data from csv to pandas df
 df = pd.read_csv(csv_path)
@@ -115,7 +125,18 @@ for index, row in df.iterrows():
                                    line={'color': 'black',
                                          'width': 2},
                                    hoverinfo='text',
-                                   hovertemplate='{0}<extra>{1}m - ({2})</extra>'.format(row.Hole, row.Length, row.Zone)))
+                                   hovertemplate='{0}<extra>{1}m - ({2})</extra>'
+                                                 '<br>X: ({3:.2f}) - ({4:.2f})'
+                                                 '<br>Y: ({5:.2f}) - ({6:.2f})'
+                                                 '<br>Z: ({7:.2f}) - ({8:.2f})'.format(row.Hole,
+                                                                                       row.Length,
+                                                                                       row.Zone,
+                                                                                       row.holeStartX,
+                                                                                       row.holeEndX,
+                                                                                       row.holeStartY,
+                                                                                       row.holeEndY,
+                                                                                       row.holeStartZ,
+                                                                                       row.holeEndZ)))
 
     # if current interval NiEq over 0.5 we plot it (there is nothing lower than .5, this is just cut off as exploration holes have no intervals to plot)
     if row.NiEq > 0.5:
@@ -130,7 +151,18 @@ for index, row in df.iterrows():
                                    line={'color': colour,
                                          'width': 15},
                                    hoverinfo='text',
-                                   hovertemplate='{0}<extra>{1}m - ({2}%)</extra>'.format(row.Hole, row.Over, row.NiEq)))
+                                   hovertemplate='{0}<extra>{1}m - ({2}% NiEq)</extra>'
+                                                 '<br>X: ({3:.2f}) - ({4:.2f})'
+                                                 '<br>Y: ({5:.2f}) - ({6:.2f})'
+                                                 '<br>Z: ({7:.2f}) - ({8:.2f})'.format(row.Hole,
+                                                                                       row.Over,
+                                                                                       row.NiEq,
+                                                                                       row.intervalStartX,
+                                                                                       row.intervalEndX,
+                                                                                       row.intervalStartY,
+                                                                                       row.intervalEndY,
+                                                                                       row.intervalStartZ,
+                                                                                       row.intervalEndZ)))
     # print(row)
     # print('{0}: Lat:{1} Lon:{2}'.format(row.Hole, row.Lat, row.Lon))
 
